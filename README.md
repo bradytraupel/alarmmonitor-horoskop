@@ -1,43 +1,52 @@
 
-# AlarmMonitor Horoskop & Autobahn-Sperrungen
+# AlarmMonitor Horoskop, Autobahn-Sperrungen & NINA-Warnungen
 
-Eine kleine, statische Web-App, die täglich um 05:00 Uhr lokal ein neues, zufälliges Horoskop aus einer CSV-Datei anzeigt. Zusätzlich werden aktuelle Sperrungen auf ausgewählten Autobahnen angezeigt, gefiltert nach für die Rettungswache relevanten Orten. Neben dem Horoskop wird ein QR‑Code angezeigt, der zu einer Feedback-Seite führt.
+Eine Web-App für die Anzeige auf einem Alarmmonitor einer Rettungswache (DIVERA 24/7 Umgebung). Die Seite zeigt täglich um 05:00 Uhr ein neues, zufälliges Horoskop aus einer CSV-Datei, aktuelle Sperrungen auf ausgewählten Autobahnen und NINA-Warnungen für die konfigurierte Region. Zusätzlich wird ein QR‑Code für eine Feedback-Seite angezeigt.
 
-Einsatzkontext: Diese Seite ist für die Anzeige auf einem Alarmmonitor einer Rettungswache gedacht und wird in einer DIVERA 24/7 Umgebung genutzt.
-
-Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor und aktuellen Verkehrsinformationen durch den oft fordernden Dienstalltag zu begleiten.
+Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor und aktuellen Verkehrs- und Warninformationen durch den oft fordernden Dienstalltag zu begleiten.
 
 
 ## Features
 - Tägliche, deterministische Zufallsauswahl aus `horoskop.csv`
 - Tageswechsel um 05:00 Uhr (lokale Zeit); automatischer Reload genau zu diesem Zeitpunkt
-- Automatischer Dark-/Light‑Mode via `prefers-color-scheme`
+- Dynamischer Wachenname per URL-Parameter (`?wachenname=...`)
 - QR‑Code neben dem Horoskop, verlinkt auf `feedback.html`
 - Feedback-Seite öffnet das E‑Mail‑Programm mit vorbefülltem Betreff und Nachricht
 - **Anzeige aktueller Sperrungen auf den Autobahnen A3, A5, A60, A67, A671**
-- **Filterung der Sperrungen nach relevanten Orten (z. B. Mainz, Wiesbaden, Rüsselsheim, etc.)**
+- **Filterung der Sperrungen nach relevanten Orten (z. B. Mainz, Wiesbaden, Rüsselsheim, etc.)**
+- **NINA-Warnungen** für die konfigurierte Region (Standard: Kreis Groß-Gerau), mit automatischer Aktualisierung alle 2 Minuten und Detail-Lazy-Loading
 
 
 ## Projektstruktur
 ```
 .
-├── index.html         # Startseite (Horoskop + QR-Code + Autobahn-Sperrungen)
-├── index.css          # Styles inkl. Dark-Mode
-├── index.js           # Logik: CSV laden, Auswahl, Auto-Reload, QR setzen, Sperrungen abrufen und filtern
+├── index.php          # Startseite (Horoskop + QR-Code + Autobahn-Sperrungen + NINA-Warnungen)
+├── index.css          # Styles
+├── index.js           # Logik: CSV laden, Auswahl, Auto-Reload, QR setzen, Sperrungen abrufen, NINA-Warnungen
 ├── horoskop.csv       # Datenquelle (Überschrift;Text)
 ├── feedback.html      # Feedback-Formular (mailto:)
 └── feedback.css       # Styles für Feedback-Seite
 ```
+
+## Wachenname per URL-Parameter
+
+Die Startseite (`index.php`) akzeptiert einen GET-Parameter `wachenname`, um den Namen der Rettungswache dynamisch anzuzeigen:
+
+```
+https://example.com/index.php?wachenname=Gustavsburg
+```
+
 ## Sperrungsanzeige & Filterung
 
 Die App ruft aktuelle Sperrungen von der offiziellen Autobahn-API für die Autobahnen A3, A5, A60, A67 und A671 ab. Es werden nur Sperrungen angezeigt, die für die Rettungswache relevant sind. Die Relevanz wird anhand von Ortsnamen und Anschlussstellen im Titel, Untertitel oder der Beschreibung der Sperrung geprüft.
 
-**Beispiel für relevante Orte:**
+**Relevante Orte:**
 
 ```
 const relevanteStichwoerter = [
   "Mainz", "Rüsselsheim", "Wiesbaden", "Darmstadt", "Raunheim", "Groß-Gerau",
-  "Büttelborn", "Bischofsheim", "Mörfelden", "Langen", "Weiterstadt", "Ginsheim-Gustavsburg"
+  "Büttelborn", "Bischofsheim", "Mörfelden-Walldorf", "Mörfelden", "Walldorf",
+  "Langen", "Weiterstadt", "Ginsheim-Gustavsburg", "Mainz -> Wiesbaden"
 ];
 ```
 
@@ -46,6 +55,15 @@ Nur Sperrungen, die einen dieser Begriffe enthalten, werden angezeigt. Die Anzei
 **Angezeigte Informationen pro Sperrung:**
 - Titel und Untertitel der Sperrung
 - Beginn und Ende (aus der Beschreibung, hervorgehoben)
+
+## NINA-Warnungen
+
+Die App zeigt NINA-Warnungen (Bevölkerungsschutz) für die konfigurierte Region an. Die Daten werden über einen lokalen Proxy-Server (`/nina/...`) abgerufen, um CORS-Probleme zu umgehen.
+
+- **Standard-Region:** Kreis Groß-Gerau (ARS: `064330000000`)
+- **Aktualisierung:** alle 2 Minuten automatisch
+- **Details:** Lazy-Loading per Klick auf "Details"
+- **Konfiguration:** ARS kann per `localStorage` (`nina_ars`) angepasst werden
 
 ## CSV-Format
 - Trennzeichen: Semikolon `;`
@@ -59,48 +77,45 @@ Tageshoroskop;Heute ist euer Tag! Zumindest bis der Melder geht.
 Spruch des Tages;Ein guter Tag, um den Kollegen daran zu erinnern, dass 'gleich zurück' relativ ist.
 ```
 
-
 ## Funktionsweise der Auswahl
-- Die Auswahl ist „willkürlich“, aber pro Tag stabil (deterministisch)
+- Die Auswahl ist „willkürlich", aber pro Tag stabil (deterministisch)
 - Der Tageswechsel findet um 05:00 Uhr lokaler Zeit statt (nicht um Mitternacht)
 - Ein Timer lädt die Seite genau um 05:00 neu, sodass automatisch das neue Horoskop erscheint
 
+## Voraussetzungen
+- **PHP** (für `index.php` mit dem `wachenname`-Parameter)
+- **Node.js** (empfohlen, für den NINA-Proxy-Server)
+
 ## Lokal starten
-Da `fetch` genutzt wird, sollte die Seite über einen lokalen Webserver geöffnet werden (nicht via `file://`).
 
-### Empfehlung (wegen NINA/CORS)
-Für die NINA-API ist im Browser oft ein **CORS-Problem** vorhanden, wenn direkt `warnung.bund.de` abgefragt wird. In diesem Repo gibt es deshalb einen kleinen Proxy-Server.
+### NINA-Proxy (empfohlen)
+Für die NINA-API wird ein lokaler Proxy-Server benötigt, um CORS-Probleme zu umgehen:
 
-- Node.js (empfohlen):
-  ```bash
-  node server.js
-  ```
-  Öffne dann: http://localhost:8000
+```bash
+node server.js
+```
+Öffne dann: http://localhost:8000
 
+### Alternativen (ohne NINA)
 - Python (3.x):
   ```bash
   python3 -m http.server 8000
   ```
-  Öffne dann: http://localhost:8000
-
 - Node (serve):
   ```bash
   npx serve
   ```
-
-## Deployment-Hinweise
-- Statisches Hosting (z. B. GitHub Pages, Netlify, Vercel) funktioniert problemlos
-- Achte darauf, dass `horoskop.csv` im selben Verzeichnis wie `index.html` liegt (fetch via relative URL)
 
 ## Feedback-Konfiguration
 - In `feedback.html` wird ein `mailto:` Link erzeugt
 - Passe die Zieladresse bei Bedarf in `feedback.html` an (Variable `to`, aktuell `feedback@example.com`)
 
 ## Anpassungen
-- Dark-Mode-Farben in `index.css` und `feedback.css`
-- QR‑Bildgröße: `index.html` (`#feedback-qr` width/height)
+- QR‑Bildgröße: `index.php` (`#feedback-qr` width/height)
 - Tageswechselzeit (aktuell 05:00): `dayKeyWithCutoff(5)` und `scheduleDailyReload(5)` in `index.js`
-- Layout: Bootstrap-Grid in `index.html`
+- Relevante Autobahnen und Orte: `showCurrentClosures()` Aufrufe und `relevanteStichwoerter` in `index.js`
+- NINA-Region (ARS): `NINA_DEFAULT_ARS` in `index.js`
+- Layout: Bootstrap-Grid in `index.php`
 
 ## Lizenz
 MIT License – siehe [LICENSE](./LICENSE).
