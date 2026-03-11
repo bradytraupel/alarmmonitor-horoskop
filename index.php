@@ -1,3 +1,6 @@
+<?php
+    $wachenname = $_GET['wachenname'];
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -8,7 +11,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1>Willkommen auf der Rettungswache Gustavsburg</h1>
+    <h1>Willkommen auf der Rettungswache <?php echo $wachenname ?></h1>
     <div class="container-fluid">
         <div class="row align-items-start">
             <div class="col-12 col-md-12">
