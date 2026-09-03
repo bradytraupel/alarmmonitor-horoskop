@@ -1,9 +1,9 @@
 
 # AlarmMonitor Horoskop, Autobahn-Sperrungen & NINA-Warnungen
 
-Eine Web-App für die Anzeige auf einem Alarmmonitor einer Rettungswache (DIVERA 24/7 Umgebung). Die Seite zeigt täglich um 05:00 Uhr ein neues, zufälliges Horoskop aus einer CSV-Datei, aktuelle Sperrungen auf ausgewählten Autobahnen und NINA-Warnungen für die konfigurierte Region. Zusätzlich wird ein QR‑Code für eine Feedback-Seite angezeigt.
+Eine Web-App für die Anzeige auf einem Alarmmonitor einer Rettungswache (DIVERA 24/7 Umgebung). Die Seite zeigt täglich um 05:00 Uhr ein neues, zufälliges Horoskop aus einer CSV-Datei, aktuelle Sperrungen auf ausgewählten Autobahnen an. Zusätzlich wird ein QR‑Code für eine Feedback-Seite angezeigt.
 
-Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor und aktuellen Verkehrs- und Warninformationen durch den oft fordernden Dienstalltag zu begleiten.
+Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor und aktuellen Verkehrsinformationen durch den oft fordernden Dienstalltag zu begleiten.
 
 
 ## Features
@@ -19,9 +19,9 @@ Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor un
 ## Projektstruktur
 ```
 .
-├── index.php          # Startseite (Horoskop + QR-Code + Autobahn-Sperrungen + NINA-Warnungen)
+├── index.php          # Startseite (Horoskop + QR-Code + Autobahn-Sperrungen)
 ├── index.css          # Styles
-├── index.js           # Logik: CSV laden, Auswahl, Auto-Reload, QR setzen, Sperrungen abrufen, NINA-Warnungen
+├── index.js           # Logik: CSV laden, Auswahl, Auto-Reload, QR setzen, Sperrungen abrufen
 ├── horoskop.csv       # Datenquelle (Überschrift;Text)
 ├── feedback.html      # Feedback-Formular (mailto:)
 └── feedback.css       # Styles für Feedback-Seite
@@ -77,7 +77,7 @@ Spruch des Tages;Ein guter Tag, um den Kollegen daran zu erinnern, dass 'gleich 
 
 ## Feedback-Konfiguration
 - In `feedback.html` wird ein `mailto:` Link erzeugt
-- Passe die Zieladresse bei Bedarf in `feedback.html` an (Variable `to`, aktuell `feedback@example.com`)
+- Passe die Zieladresse bei Bedarf in `feedback.html` an (Variable `to`, aktuell `feedback@deinedomain.de`)
 
 ## Anpassungen
 - QR‑Bildgröße: `index.php` (`#feedback-qr` width/height)
