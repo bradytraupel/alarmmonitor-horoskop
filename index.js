@@ -191,7 +191,7 @@ async function fetchJson(url, { signal } = {}) {
 const NINA_DEFAULT_ARS = "064330000000"; // Kreis Groß-Gerau (für die Wache Gustavsburg)
 // Browser-Problem: warnung.bund.de/api31 ist oft ohne CORS erreichbar.
 // Lösung: same-origin Proxy-Route (/nina/...) über server.js.
-const NINA_BASE = "/nina";
+const NINA_BASE = "https://nina.api.proxy.bund.dev/api31";
 const NINA_REFRESH_MS = 2 * 60 * 1000;
 
 function getConfiguredNinaARS() {
@@ -301,7 +301,8 @@ function renderNinaList(listEl, items) {
 }
 
 async function loadNinaDashboard(ars, { signal } = {}) {
-  const url = `${NINA_BASE}/dashboard/${encodeURIComponent(ars)}.json`;
+  //const url = `${NINA_BASE}/dashboard/${encodeURIComponent(ars)}.json`;
+  const url = `${NINA_BASE}/dashboard/${NINA_DEFAULT_ARS}.json`;
   const raw = await fetchJson(url, { signal });
   const arr = Array.isArray(raw) ? raw : [];
   const parsed = arr.map(parseDashboardEntry).filter((x) => x && x.id);

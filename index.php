@@ -25,12 +25,12 @@
                 </div>
             </div>
             <div class="col-12 col-md-10">
-                <div id="nina" class="card mt-4">
+                <!-- <div id="nina" class="card mt-4">
                     <div class="card-body">
-                        <!-- <h5 class="card-title">NINA Warnungen (Umgebung)</h5> -->
+                        <h5 class="card-title">NINA Warnungen (Umgebung)</h5>
                         <div id="nina-content"></div>
                     </div>
-                </div>
+                </div> -->
                 <div class="card mt-4">
                     <div class="card-body">
                         <h5 class="card-title">Aktuelle Autobahnsperrungen</h5>
