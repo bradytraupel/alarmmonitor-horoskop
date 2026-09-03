@@ -32,7 +32,7 @@ Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor un
 Die Startseite (`index.php`) akzeptiert einen GET-Parameter `wachenname`, um den Namen der Rettungswache dynamisch anzuzeigen:
 
 ```
-https://example.com/index.php?wachenname=Gustavsburg
+https://deinedomain.de/index.php?wachenname=Gustavsburg
 ```
 
 ## Sperrungsanzeige & Filterung
@@ -83,7 +83,6 @@ Spruch des Tages;Ein guter Tag, um den Kollegen daran zu erinnern, dass 'gleich 
 - QR‑Bildgröße: `index.php` (`#feedback-qr` width/height)
 - Tageswechselzeit (aktuell 05:00): `dayKeyWithCutoff(5)` und `scheduleDailyReload(5)` in `index.js`
 - Relevante Autobahnen und Orte: `showCurrentClosures()` Aufrufe und `relevanteStichwoerter` in `index.js`
-- NINA-Region (ARS): `NINA_DEFAULT_ARS` in `index.js`
 - Layout: Bootstrap-Grid in `index.php`
 
 ## Lizenz
