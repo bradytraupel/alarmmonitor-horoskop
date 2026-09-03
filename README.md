@@ -14,7 +14,6 @@ Hinweis: Dieses Projekt ist ein Spaßprojekt, um Kolleg:innen mit etwas Humor un
 - Feedback-Seite öffnet das E‑Mail‑Programm mit vorbefülltem Betreff und Nachricht
 - **Anzeige aktueller Sperrungen auf den Autobahnen A3, A5, A60, A67, A671**
 - **Filterung der Sperrungen nach relevanten Orten (z. B. Mainz, Wiesbaden, Rüsselsheim, etc.)**
-- **NINA-Warnungen** für die konfigurierte Region (Standard: Kreis Groß-Gerau), mit automatischer Aktualisierung alle 2 Minuten und Detail-Lazy-Loading
 
 
 ## Projektstruktur
@@ -56,15 +55,6 @@ Nur Sperrungen, die einen dieser Begriffe enthalten, werden angezeigt. Die Anzei
 - Titel und Untertitel der Sperrung
 - Beginn und Ende (aus der Beschreibung, hervorgehoben)
 
-## NINA-Warnungen
-
-Die App zeigt NINA-Warnungen (Bevölkerungsschutz) für die konfigurierte Region an. Die Daten werden über einen lokalen Proxy-Server (`/nina/...`) abgerufen, um CORS-Probleme zu umgehen.
-
-- **Standard-Region:** Kreis Groß-Gerau (ARS: `064330000000`)
-- **Aktualisierung:** alle 2 Minuten automatisch
-- **Details:** Lazy-Loading per Klick auf "Details"
-- **Konfiguration:** ARS kann per `localStorage` (`nina_ars`) angepasst werden
-
 ## CSV-Format
 - Trennzeichen: Semikolon `;`
 - Erste Zeile (Header) wird erkannt und übersprungen
@@ -84,27 +74,6 @@ Spruch des Tages;Ein guter Tag, um den Kollegen daran zu erinnern, dass 'gleich 
 
 ## Voraussetzungen
 - **PHP** (für `index.php` mit dem `wachenname`-Parameter)
-- **Node.js** (empfohlen, für den NINA-Proxy-Server)
-
-## Lokal starten
-
-### NINA-Proxy (empfohlen)
-Für die NINA-API wird ein lokaler Proxy-Server benötigt, um CORS-Probleme zu umgehen:
-
-```bash
-node server.js
-```
-Öffne dann: http://localhost:8000
-
-### Alternativen (ohne NINA)
-- Python (3.x):
-  ```bash
-  python3 -m http.server 8000
-  ```
-- Node (serve):
-  ```bash
-  npx serve
-  ```
 
 ## Feedback-Konfiguration
 - In `feedback.html` wird ein `mailto:` Link erzeugt
